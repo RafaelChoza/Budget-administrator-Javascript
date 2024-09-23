@@ -38,6 +38,7 @@ main {
 }
 
 .item__description,
+.item__date,
 .item__category,
 .item__amount,
 .submit__data,
@@ -46,6 +47,7 @@ main {
 }
 
 .item__description,
+.item__date,
 .item__category,
 .item__amount,
 .display__budget,
@@ -313,6 +315,7 @@ header,
     .reset__icon,
     .item__category,
     .item__amount,
+    .item__date,
     .close__modalIcon {
         font-size: 2vw;
     }
