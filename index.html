@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <link href="https://fonts.cdnfonts.com/css/helmet?styles=25304" rel="stylesheet">
     <title>Administrador de Presupuesto</title>
 </head>
@@ -46,6 +49,8 @@
                     <input name="expenseDescription" type="text" class="expense__description" required
                         placeholder="Ingrese descripción del gasto">
                 </div>
+                <label for="expense-date">Fecha del gasto:</label>
+                <input type="text" id="expense-date" class="expense__date" placeholder="Selecciona fecha">
                 <form class="form"></form>
                 <label class="modal__activitiesTitle" for="activities">Elige una opción de la razón del gasto</label>
                 <select class="select__activity" name="activities" required>

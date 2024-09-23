@@ -70,9 +70,10 @@ submitData.addEventListener('click', () => {
 
 //Clase para crear los gastos
 class Expense {
-    constructor(id, description, category, amount) {
+    constructor(id, description, date, category, amount) {
         this.id = id
         this.description = description
+        this.date = date
         this.category = category
         this.amount = amount
     }
@@ -88,7 +89,7 @@ let expensesArray = []
 
 //Función para dar accion al boton de enviar del modal y renderizar los gastos
 document.querySelector('.submit__data').addEventListener('click', () => {
-
+    const date = document.querySelector('.expense__date').value;
     const description = document.querySelector('.expense__description').value
     const category = document.querySelector('.select__activity').value
     const amount = parseFloat(document.querySelector('.expense__value').value);
@@ -97,7 +98,7 @@ document.querySelector('.submit__data').addEventListener('click', () => {
 
     budgetStatusShow.classList.remove('hide')
 
-    const newExpense = new Expense(id, description, category, amount);
+    const newExpense = new Expense(id, description, date, category, amount);
     expensesArray.push(newExpense);
 
     localStorage.setItem('expenses', JSON.stringify(expensesArray))
@@ -113,21 +114,33 @@ const descriptionInput = document.querySelector('.expense__description');
 const categoryInput = document.querySelector('.select__activity');
 const amountInput = document.querySelector('.expense__value');
 const submitDataButton = document.querySelector('.submit__data');
+const dateExpense = document.querySelector('.expense__date')
 
 // Función para habilitar/deshabilitar el botón según la validación
 const validateForm = () => {
     const description = descriptionInput.value.trim();
     const category = categoryInput.value.trim();
     const amount = parseFloat(amountInput.value.trim());
+    const date = dateExpense.value.trim();
 
     // Verificar si los campos están vacíos o si el monto no es válido (NaN o menor o igual a 0)
-    if (description === '' || category === '' || isNaN(amount) || amount <= 0) {
+    if (description === '' || category === '' || isNaN(amount) || amount <= 0 || date === '') {
         submitDataButton.disabled = true; // Deshabilitar el botón si la validación falla
     } else {
         submitDataButton.disabled = false; // Habilitar el botón si todo es válido
         submitDataButton.classList.remove('hide')
     }
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#expense-date", {
+        dateFormat: "d-M-Y", // Formato de fecha
+        altInput: true,      // Opción para mostrar una fecha amigable (si deseas)
+        altFormat: "F j, Y", // Formato amigable que se muestra
+        locale: "es"         // Cambia a español (opcional)
+    });
+});
+
 
 // Agregar eventos para validar en tiempo real mientras el usuario escribe o cambia datos
 descriptionInput.addEventListener('input', validateForm);
@@ -149,6 +162,7 @@ const renderExpenses = () => {
         <div class="divItem">
             <p class="item__id">ID: ${expense.id}</p>
             <p class="item__description">Descripción: ${expense.description}</p>
+            <p class="item__date">Fecha: ${expense.date}</p>
             <p class="item__category">Categoría: ${expense.category}</p>
             <p class="item__amount">Monto: $${parseFloat(expense.amount).toFixed(2)}</p>
             <div class="divIcons">
