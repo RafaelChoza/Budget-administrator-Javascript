@@ -93,6 +93,16 @@
         <section class="activities__section">
             <div class="div__expensesHeader">
                 <h2 class="expenses__title">Resumen de gastos</h2>
+                <div>
+                    <span>Ordenar Gastos por:</span>
+                    <select class="select__order" name="orderExpenses" required>
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="chronologicTime">Orden Cronológico</option>
+                        <option value="inverseChronologic">Cronológica inversa</option>
+                        <option value="descendentAmount">Monto mayor a menor</option>
+                        <option value="ascendentAmount">Monto menor a mayor</option>
+                    </select>
+                </div>
                 <p class="total__expenses">Total de gastos: $0.00</p>
             </div>
             

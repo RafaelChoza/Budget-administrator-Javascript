@@ -158,6 +158,11 @@ const renderExpenses = () => {
 
     expensesList.innerHTML = ''
 
+    //Aqui se actuiliza el expensesArray
+    selectAction()
+    console.log(expensesArray)
+
+
     expensesArray.forEach((expense) => {
         const expenseItem = document.createElement('div')
         expenseItem.classList.add('expense_item')
@@ -177,6 +182,7 @@ const renderExpenses = () => {
             expensesList.appendChild(expenseItem);
     })
 
+    
     const totalExpensed = document.querySelector('.total__expenses')
     totalExpensed.textContent = `Total de gastos: $${totalAmount.toFixed(2)}`;
 
@@ -200,7 +206,6 @@ const updateExpenseProgress = () => {
 
 //Función que calcula el presupuesto que no se ha usado, el balance
 const budgetBalanceCal = () => {
-    console.log('Budget Value:', window.budgetValue);
     let totalAmount = calculateTotalExpenses();
     let budget2 = parseFloat(window.budgetValue) || 1; // Asegúrate de convertir a número
     
@@ -400,3 +405,44 @@ const loadCategories = () => {
         selectActivity.appendChild(newCategory);
     });
 };
+
+//Función que ordenas los gastos por fecha en orden cronológico
+const orderExpensesDate = () => {
+    expensesArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesDateInverse = () => {
+    expensesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesAmountDescendent = () => {
+    expensesArray.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesAmountAscendent = () => {
+    expensesArray.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount));
+}
+
+const selectAction = () => {
+    const orderSelector = document.querySelector('.select__order')
+
+    orderSelector.addEventListener('change', (event) => {
+        if (event.target.value === 'chronologicTime') {
+            console.log(event.target)
+            orderExpensesDate()
+        } else if (event.target.value === 'inverseChronologic') {
+            console.log(event.target)
+            orderExpensesDateInverse()
+        } else if (event.target.value === 'descendentAmount') {
+            console.log(event.target)
+            orderExpensesAmountDescendent()
+        } else if (event.target.value === 'ascendentAmount') {
+            console.log(event.target)
+            orderExpensesAmountAscendent()
+        }
+        renderExpenses()
+     });
+}
