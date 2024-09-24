@@ -93,6 +93,7 @@ document.querySelector('.submit__data').addEventListener('click', () => {
     const description = document.querySelector('.expense__description').value
     const category = document.querySelector('.select__activity').value
     const amount = parseFloat(document.querySelector('.expense__value').value);
+    const divNewCategory = document.querySelector('.div__newCategory');
 
     const id = idGenerator()
 
@@ -102,6 +103,8 @@ document.querySelector('.submit__data').addEventListener('click', () => {
     expensesArray.push(newExpense);
 
     localStorage.setItem('expenses', JSON.stringify(expensesArray))
+
+    divNewCategory.classList.add('hide')
 
     renderExpenses()
     updateExpenseProgress();
@@ -279,6 +282,7 @@ const clearModalForm = () => {
     document.querySelector('.select__activity').value = ''
     document.querySelector('.expense__value').value = ''
     document.querySelector('.submit__data').classList.add('hide')
+    document.querySelector('.new__categoryText').value = ''
 }
 
 const resetApp = () => {
@@ -333,9 +337,40 @@ document.addEventListener('DOMContentLoaded', () => {
         renderExpenses();
         updateExpenseProgress();
         renderBudgetBalance();
-    }
+    }  
 });
 
 
+//Función donde se asigna el evento click a selector de categoria de gasto y se pregunta si se dió click en crear categoria
+document.addEventListener('DOMContentLoaded', () => {
+    const selectActivity = document.querySelector('.select__activity');
+    const divNewCategory = document.querySelector('.div__newCategory');
+    const newCategoryButton = document.querySelector('.new__categoryButton')
 
+    selectActivity.addEventListener('click', (event) => {
+        if (event.target.value === 'createCategory') {
+            divNewCategory.classList.remove('hide');
+        }
+    });
 
+    newCategoryButton.addEventListener('click', () => {
+        addCategory()
+        divNewCategory.classList.add('hide')
+        document.querySelector('.select__activity').value = ''
+    })
+});
+
+const displayGraphButton = document.querySelector('.graph__displayButton')
+const closeGraphIcon = document.querySelector('.close__graphIcon')
+const divGraph = document.querySelector('.div__chart')
+
+//Función que crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
+const addCategory = () => {
+    const newCategory = document.createElement('option')
+    const selectActivity = document.querySelector('.select__activity');
+    const newCategoryText = document.querySelector('.new__categoryText')
+
+    selectActivity.appendChild(newCategory)
+    newCategory.classList.add('new__category')
+    newCategory.textContent = newCategoryText.value
+}
