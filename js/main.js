@@ -347,6 +347,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const divNewCategory = document.querySelector('.div__newCategory');
     const newCategoryButton = document.querySelector('.new__categoryButton')
 
+    // Cargar categorías desde localStorage al cargar la página
+    loadCategories();
+
     selectActivity.addEventListener('click', (event) => {
         if (event.target.value === 'createCategory') {
             divNewCategory.classList.remove('hide');
@@ -373,4 +376,27 @@ const addCategory = () => {
     selectActivity.appendChild(newCategory)
     newCategory.classList.add('new__category')
     newCategory.textContent = newCategoryText.value
+
+    // Guardar la nueva categoría en localStorage
+    saveCategory(newCategoryText.value);
 }
+
+// Función para guardar una categoría en localStorage
+const saveCategory = (category) => {
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+    categories.push(category);
+    localStorage.setItem('categories', JSON.stringify(categories));
+};
+
+// Función para cargar categorías desde localStorage
+const loadCategories = () => {
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+    const selectActivity = document.querySelector('.select__activity');
+
+    categories.forEach(category => {
+        const newCategory = document.createElement('option');
+        newCategory.classList.add('new__category');
+        newCategory.textContent = category;
+        selectActivity.appendChild(newCategory);
+    });
+};
