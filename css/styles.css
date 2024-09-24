@@ -122,6 +122,23 @@ header,
     transform: scale(1.1);
 }
 
+.graph__displayButton {
+    position: fixed;
+    left: 2vw;
+    top: .1vw;
+    background-color: #777777;
+    color: #ffffff;
+    padding: 1vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    transition: all .25s ease;
+    text-align: center;
+}
+
+.graph__displayButton:hover {
+    transform: scale(1.1);
+}
+
 .add__expenseIcon {
     background-color: #0000ff;
     color: #ffffff;
@@ -304,6 +321,22 @@ header,
 
 #progress-percent {
     font-size: 2vw;
+}
+
+.div__chart {
+    width: 30%;
+}
+
+.div__newCategory {
+    border: 1px solid #000000;
+    border-radius: 1vw;
+    padding: 1vw;
+}
+
+.div__newCategory p {
+    font-size: .7vw;
+    line-height: 1;
+    margin: 0;
 }
 
 @media (max-width: 600px) {

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -63,6 +64,7 @@
                     <option value="transporte">Transporte</option>
                     <option value="credito">Crédito</option>
                     <option value="otra">Otra</option>
+                    <option value="createCategory" class="creat__newCategory">Crear Categoría</option>
                 </select>
                 <div class="form2">
                     <div class="div_expenseValue">
@@ -77,6 +79,14 @@
 
                 </div>
                 </form>
+                <div class="div__newCategory hide">
+                    <h3>Nueva Categoría</h3>
+                    <p>Aquí puedes crear tus propias categorías.</p>
+                    <p>Escribe el nombre de la categoria y da clic en Enviar</p>
+                    <p>Lo puedes hacer las veces que sean necesarias</p>
+                    <input class="new__categoryText" type="text" placeholder="Escribe el nombre de la categoría" name="newCategory">
+                    <input class="new__categoryButton" type="submit" name="newCategory">
+                </div>
             </section>
         </div>
 
@@ -97,7 +107,10 @@
         <div>
             <p class="add__expenseIcon hide">+</p>
             <p class="reset__icon">Resetear APP</p>
+            <p class="graph__displayButton">Grafica Gastos-Categoría</p>
         </div>
+
+        
     </main>
 
     <script src="js/main.js"></script>
