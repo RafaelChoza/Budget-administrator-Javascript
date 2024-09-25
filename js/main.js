@@ -242,6 +242,7 @@ const assignDeleteEvent = () => {
 //Función que filtra el array de gastos y solo deja los gastos que no fueron seleccionados para eliminar
 const deleteExpense = (id) => {
     expensesArray = expensesArray.filter(expense => expense.id !== id); // Filtrar por ID
+    localStorage.setItem('expenses', JSON.stringify(expensesArray)); // Actualizar localStorage
     renderExpenses(); // Renderizar de nuevo los gastos actualizados
     updateExpenseProgress(); // Actualizar el progreso de los gastos después de borrar
     renderBudgetBalance();
