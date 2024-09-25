@@ -86,32 +86,46 @@ const idGenerator = () => {
 }
 
 let expensesArray = []
+let currentEditId = null; // Declarar la variable al inicio del archivo
 
 //Función para dar accion al boton de enviar del modal y renderizar los gastos
 document.querySelector('.submit__data').addEventListener('click', () => {
     const date = document.querySelector('.expense__date').value;
-    const description = document.querySelector('.expense__description').value
-    const category = document.querySelector('.select__activity').value
+    const description = document.querySelector('.expense__description').value;
+    const category = document.querySelector('.select__activity').value;
     const amount = parseFloat(document.querySelector('.expense__value').value);
     const divNewCategory = document.querySelector('.div__newCategory');
 
-    const id = idGenerator()
+    if (currentEditId) {
+        const index = expensesArray.findIndex((expense) => expense.id === currentEditId);
+        if (index !== -1) {
+            expensesArray[index] = new Expense(currentEditId, description, date, category, amount);
 
-    budgetStatusShow.classList.remove('hide')
+            localStorage.setItem('expenses', JSON.stringify(expensesArray));
+            renderExpenses();
+            updateExpenseProgress();
+            renderBudgetBalance();
+            clearModalForm();
+        }
+    } else {
+        const id = idGenerator();
 
-    const newExpense = new Expense(id, description, date, category, amount);
-    expensesArray.push(newExpense);
+        budgetStatusShow.classList.remove('hide');
 
-    localStorage.setItem('expenses', JSON.stringify(expensesArray))
+        const newExpense = new Expense(id, description, date, category, amount);
+        expensesArray.push(newExpense);
 
-    divNewCategory.classList.add('hide')
+        localStorage.setItem('expenses', JSON.stringify(expensesArray));
 
-    renderExpenses()
-    updateExpenseProgress();
-    renderBudgetBalance();
-    clearModalForm();
+        divNewCategory.classList.add('hide');
 
-})
+        renderExpenses();
+        updateExpenseProgress();
+        renderBudgetBalance();
+        clearModalForm();
+    }
+});
+
 
 const descriptionInput = document.querySelector('.expense__description');
 const categoryInput = document.querySelector('.select__activity');
@@ -160,7 +174,6 @@ const renderExpenses = () => {
 
     //Aqui se actuiliza el expensesArray
     selectAction()
-    console.log(expensesArray)
 
 
     expensesArray.forEach((expense) => {
@@ -175,7 +188,7 @@ const renderExpenses = () => {
             <p class="item__amount">Monto: $${parseFloat(expense.amount).toFixed(2)}</p>
             <div class="divIcons">
                 <p class="item__delete" data-id="${expense.id}">Borrar</p>
-                <p class="item__edit">Editar</p>
+                <p class="item__edit" data-id="${expense.id}">Editar</p>
             </div>
         </div>    `
 
@@ -187,6 +200,7 @@ const renderExpenses = () => {
     totalExpensed.textContent = `Total de gastos: $${totalAmount.toFixed(2)}`;
 
     assignDeleteEvent();
+    assignEditEvent();
 }
 
 //Función que calcula el total de la cantidad de los gastos
@@ -230,7 +244,7 @@ const renderBudgetBalance = () => {
 //Función para crea el array de todos los botones delete__expense y detecta a que boton se le da click
 const assignDeleteEvent = () => {
     const deleteButtons = document.querySelectorAll('.item__delete');
-
+    
     deleteButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
             const id = Number(event.target.getAttribute('data-id')); // Asegúrate de que sea un número
@@ -239,9 +253,36 @@ const assignDeleteEvent = () => {
     });
 };
 
+const assignEditEvent = () => {
+    const editButtons = document.querySelectorAll('.item__edit')
+
+    editButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            const id = Number(e.target.getAttribute('data-id'));
+            editExpense(id)
+        })
+    })
+}
+
+const editExpense = (id) => {
+    const expenseToEdit = expensesArray.find(expense => expense.id === id)
+        
+    if (expenseToEdit) {
+        document.querySelector('.expense__description').value = expenseToEdit.description;
+        document.querySelector('.select__activity').value = expenseToEdit.category;
+        document.querySelector('.expense__value').value = expenseToEdit.amount;
+        document.querySelector('.expense__date').value = expenseToEdit.date;
+    
+        backModalSection.classList.add('showFlex');
+        modalSection.classList.add('show');
+    
+        currentEditId = id;
+    }
+}
 //Función que filtra el array de gastos y solo deja los gastos que no fueron seleccionados para eliminar
 const deleteExpense = (id) => {
-    expensesArray = expensesArray.filter(expense => expense.id !== id); // Filtrar por ID
+    expensesArray = expensesArray.filter((expense) => expense.id !== id); // Filtrar por ID
+    localStorage.setItem('expenses', JSON.stringify(expensesArray)); // Actualizar localStorage
     renderExpenses(); // Renderizar de nuevo los gastos actualizados
     updateExpenseProgress(); // Actualizar el progreso de los gastos después de borrar
     renderBudgetBalance();
@@ -426,21 +467,19 @@ const orderExpensesAmountAscendent = () => {
     expensesArray.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount));
 }
 
+
+//Función que hace la logica para ordenar los gastos de acuerdo a la seleccion que se haga
 const selectAction = () => {
     const orderSelector = document.querySelector('.select__order')
 
     orderSelector.addEventListener('change', (event) => {
         if (event.target.value === 'chronologicTime') {
-            console.log(event.target)
             orderExpensesDate()
         } else if (event.target.value === 'inverseChronologic') {
-            console.log(event.target)
             orderExpensesDateInverse()
         } else if (event.target.value === 'descendentAmount') {
-            console.log(event.target)
             orderExpensesAmountDescendent()
         } else if (event.target.value === 'ascendentAmount') {
-            console.log(event.target)
             orderExpensesAmountAscendent()
         }
         renderExpenses()
