@@ -244,6 +244,7 @@ header,
     border-radius: 1vw;
     box-shadow: 10px 5px 5px #0000005d;
     margin: 1vw;
+    background-color: #e9e9e9;
 }
 
 .divItem {
@@ -344,33 +345,46 @@ header,
         width: 80vw;
     }
 
-    .item__description,
+    .submit__data,
+    .submit__budget,
     .reset__icon,
-    .item__category,
-    .item__amount,
-    .item__date,
     .close__modalIcon {
         font-size: 2vw;
     }
 
     .item__description,
+    .item__date,
     .item__category,
     .item__amount,
-    .display__budget,
-    .budget__balance,
     .budget__stateTitle,
     header,
     .modal__activitiesTitle,
     .expense__label,
-    .total__expenses,
     .expense__descriptionTitle,
-    .budget__title,
     .expenses__title {
         font-size: 2.5vw;
     }
 
-    .modal__title, .over__budget {
+    .item__delete, 
+    .item__edit,
+    .modal__title, 
+    .over__budget,
+    span {
         font-size: 3vw;
+    }
+
+    .total__expenses,
+    .item__description,
+    .item__category,
+    .item__amount,
+    .item__date,
+    .display__budget,
+    .budget__balance {
+        font-size: 3.5vw;
+    }
+
+    .budget__title {
+        font-size: 4vw;
     }
 
     .divItem {
@@ -379,19 +393,18 @@ header,
     }
 
     .item__description,
+    .item__date,
     .item__category,
     .item__amount {
         margin: 1px;
     }
 
-    .item__delete, 
-    .item__edit {
-        font-size: 2vw;
+    .budget__section {
+        width: 90%;
     }
 
-    .submit__data,
-    .submit__budget {
-        font-size: 2vw;
+    .activities__section {
+        width: 90%;
     }
 
 }
