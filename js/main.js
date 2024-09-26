@@ -106,6 +106,7 @@ document.querySelector('.submit__data').addEventListener('click', () => {
             updateExpenseProgress();
             renderBudgetBalance();
             clearModalForm();
+            currentEditId = null;
         }
     } else {
         const id = idGenerator();
@@ -396,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar categorías desde localStorage al cargar la página
     loadCategories();
 
-    selectActivity.addEventListener('click', (event) => {
+    selectActivity.addEventListener('change', (event) => {
         if (event.target.value === 'createCategory') {
             divNewCategory.classList.remove('hide');
         }
