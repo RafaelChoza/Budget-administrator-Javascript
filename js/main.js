@@ -43,15 +43,7 @@ submitButton.addEventListener('click', function() {
 
     window.budgetValue = budgetValue.toFixed(2);
 
-     location.reload(); //Se recarga la pagina
-    
 });
-
-const editBudgeButton = document.querySelector('.edit__budgetButton')
-
-editBudgeButton.addEventListener('click', () => {
-    budgetInput.classList.remove('hide')
-})
 
 const addExpenseIcon = document.querySelector('.add__expenseIcon')
 const backModalSection = document.querySelector('.div_backModal')
