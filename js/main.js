@@ -42,8 +42,16 @@ submitButton.addEventListener('click', function() {
     addExpenseIcon.classList.remove('hide')
 
     window.budgetValue = budgetValue.toFixed(2);
+
+    location.reload(); //Se recarga la pagina
     
 });
+
+const editBudgeButton = document.querySelector('.edit__budgetButton')
+
+editBudgeButton.addEventListener('click', () => {
+    budgetInput.classList.remove('hide')
+})
 
 
 const addExpenseIcon = document.querySelector('.add__expenseIcon')
@@ -88,7 +96,7 @@ const idGenerator = () => {
 let expensesArray = []
 let currentEditId = null; // Declarar la variable al inicio del archivo
 
-//Función para dar accion al boton de enviar del modal y renderizar los gastos
+//Función para dar accion al boton de enviar del modal y renderizar los gastos y tambien los gastos editados
 document.querySelector('.submit__data').addEventListener('click', () => {
     const date = document.querySelector('.expense__date').value;
     const description = document.querySelector('.expense__description').value;
@@ -106,6 +114,7 @@ document.querySelector('.submit__data').addEventListener('click', () => {
             updateExpenseProgress();
             renderBudgetBalance();
             clearModalForm();
+            currentEditId = null
         }
     } else {
         const id = idGenerator();
@@ -123,7 +132,9 @@ document.querySelector('.submit__data').addEventListener('click', () => {
         updateExpenseProgress();
         renderBudgetBalance();
         clearModalForm();
+        currentEditId = null
     }
+    location.reload(); //Se recarga la pagina
 });
 
 
@@ -249,6 +260,7 @@ const assignDeleteEvent = () => {
         button.addEventListener('click', (event) => {
             const id = Number(event.target.getAttribute('data-id')); // Asegúrate de que sea un número
             deleteExpense(id);
+            location.reload()
         });
     });
 };
@@ -383,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderExpenses();
         updateExpenseProgress();
         renderBudgetBalance();
+        renderExpensesChart();
     }  
 });
 
@@ -483,5 +496,59 @@ const selectAction = () => {
             orderExpensesAmountAscendent()
         }
         renderExpenses()
+        location.reload()
      });
 }
+
+const getExpensesByCategory = () => {
+  const categories = {};
+  expensesArray.forEach((expense) => {
+    if (!categories[expense.category]) {
+      categories[expense.category] = 0;
+    }
+    categories[expense.category] += parseFloat(expense.amount);
+  });
+  return categories;
+};
+
+const renderExpensesChart = () => {
+  const ctx = document.getElementById('expensesChart').getContext('2d');
+  const expensesByCategory = getExpensesByCategory();
+  const labels = Object.keys(expensesByCategory);
+  const data = Object.values(expensesByCategory);
+
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Gastos por categoría',
+        data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+};

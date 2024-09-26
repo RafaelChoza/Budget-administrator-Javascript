@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
     <link href="https://fonts.cdnfonts.com/css/helmet?styles=25304" rel="stylesheet">
     <title>Administrador de Presupuesto</title>
 </head>
@@ -23,7 +22,10 @@
             <h2 class="budget__title">Presupuesto</h2>
             <input class="input__budget" type="number" placeholder="Ingresa el valor del presupuesto" required>
             <input class="submit__budget hide" type="submit">
-            <p class="display__budget">El presupuesto ingresado es de: </p>
+            <div class="div__budgetDisplayEdit">
+                <p class="display__budget">El presupuesto ingresado es de: </p>
+                <button class="edit__budgetButton">Editar Presupuesto</button>
+            </div>
             <p class="budget__balance">El presupuesto restante es de: </p>
             <p class="over__budget hide">presupuesto fue rebasado</p>
         </section>
@@ -118,11 +120,11 @@
             <p class="reset__icon">Resetear APP</p>
         </div>
 
-        <div class="div__chart">
-            <canvas id="myChart" width="400" height="200"></canvas>
+        <div>
+            <canvas id="expensesChart" width="400" height="400"></canvas>
         </div>
 
-        
+
     </main>
 
     <script src="js/main.js"></script>
