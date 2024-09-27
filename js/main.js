@@ -517,7 +517,7 @@ const renderExpensesChart = () => {
   const data = Object.values(expensesByCategory);
 
   const chart = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
       labels,
       datasets: [{
