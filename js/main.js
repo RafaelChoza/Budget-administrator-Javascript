@@ -496,7 +496,6 @@ const selectAction = () => {
             orderExpensesAmountAscendent()
         }
         renderExpenses()
-        location.reload()
      });
 }
 
