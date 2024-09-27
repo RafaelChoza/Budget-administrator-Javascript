@@ -392,6 +392,22 @@ header,
     display: flex;
 }
 
+.chart__icon {
+    position: fixed;
+    left: 88vw;
+    top: 25vw;
+    fill: #fff;
+    width: 3vw;
+    background-color: #0000ff;
+    padding: 2.5vw;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+.chart__icon:hover {
+    transform: scale(1.1);
+}
 
 @media (max-width: 600px) {
     .modal__section {
