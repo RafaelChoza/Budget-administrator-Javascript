@@ -496,4 +496,8 @@ header,
         margin: 1vw;
     }
 
+    .chart__icon {
+        top: 155vw;
+    }
+
 }
