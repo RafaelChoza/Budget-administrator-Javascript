@@ -395,7 +395,7 @@ header,
 .chart__icon {
     position: fixed;
     left: 88vw;
-    top: 25vw;
+    bottom: .2vw;
     fill: #fff;
     width: 3vw;
     background-color: #0000ff;
@@ -495,9 +495,4 @@ header,
     .close__chartIcon {
         margin: 1vw;
     }
-
-    .chart__icon {
-        top: 145vw;
-    }
-
 }
