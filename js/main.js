@@ -552,12 +552,12 @@ const renderExpensesChart = () => {
   });
 };
 
-const showChartIcon = document.querySelector('.show__chartIcon')
 const divChart = document.querySelector('.div__chart')
 const chartSection = document.querySelector('.chart__section')
 const closeChartIcon = document.querySelector('.close__chartIcon')
+const chartIcon = document.querySelector('.chart__icon')
 
-showChartIcon.addEventListener('click', () => {
+chartIcon.addEventListener('click', () => {
     chartSection.classList.add('showBackChart')
     divChart.classList.add('showChart')
 })
