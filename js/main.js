@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar categorías desde localStorage al cargar la página
     loadCategories();
 
-    selectActivity.addEventListener('click', (event) => {
+    selectActivity.addEventListener('change', (event) => {
         if (event.target.value === 'createCategory') {
             divNewCategory.classList.remove('hide');
         }
