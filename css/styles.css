@@ -465,10 +465,19 @@ header,
     }
 
     .show__chartIcon {
-        font-size: 2vw;
+        font-size: 3vw;
         width: fit-content;
         left: 77vw;
         top: 10vw;
+    }
+
+    .chart__section h2 {
+        font-size: 4vw;
+        margin: 1vw;
+    }
+
+    .close__chartIcon {
+        margin: 1vw;
     }
 
 }
