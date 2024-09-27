@@ -518,7 +518,7 @@ const renderExpensesChart = () => {
   const data = Object.values(expensesByCategory);
 
   const chart = new Chart(ctx, {
-    type: 'bar',
+    type: 'pie',
     data: {
       labels,
       datasets: [{
@@ -552,3 +552,18 @@ const renderExpensesChart = () => {
     },
   });
 };
+
+const showChartIcon = document.querySelector('.show__chartIcon')
+const divChart = document.querySelector('.div__chart')
+const chartSection = document.querySelector('.chart__section')
+const closeChartIcon = document.querySelector('.close__chartIcon')
+
+showChartIcon.addEventListener('click', () => {
+    chartSection.classList.add('showBackChart')
+    divChart.classList.add('showChart')
+})
+
+closeChartIcon.addEventListener('click', () => {
+    chartSection.classList.remove('showBackChart')
+    divChart.classList.remove('showChart')
+})

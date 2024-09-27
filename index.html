@@ -118,13 +118,17 @@
         <div>
             <p class="add__expenseIcon hide">+</p>
             <p class="reset__icon">Resetear APP</p>
+            <p class="show__chartIcon">Ver Gráfica de Gastos</p>
         </div>
 
-        <div>
-            <canvas id="expensesChart" width="400" height="400"></canvas>
-        </div>
-
-
+        <section class="chart__section">
+            <div class="div__chart">
+                <p class="close__chartIcon">Cerrar</p>
+                <h2>Grafica de Gastos</h2>
+                <canvas id="expensesChart" width="350" height="400"></canvas>
+            </div>
+        </section>
+       
     </main>
 
     <script src="js/main.js"></script>
