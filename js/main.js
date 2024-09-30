@@ -42,8 +42,16 @@ submitButton.addEventListener('click', function() {
     addExpenseIcon.classList.remove('hide')
 
     window.budgetValue = budgetValue.toFixed(2);
+
+    location.reload(); //Se recarga la pagina
     
 });
+
+const editBudgeButton = document.querySelector('.edit__budgetButton')
+
+editBudgeButton.addEventListener('click', () => {
+    budgetInput.classList.remove('hide')
+})
 
 
 const addExpenseIcon = document.querySelector('.add__expenseIcon')
@@ -86,29 +94,49 @@ const idGenerator = () => {
 }
 
 let expensesArray = []
+let currentEditId = null; // Declarar la variable al inicio del archivo
 
-//Función para dar accion al boton de enviar del modal y renderizar los gastos
+//Función para dar accion al boton de enviar del modal y renderizar los gastos y tambien los gastos editados
 document.querySelector('.submit__data').addEventListener('click', () => {
     const date = document.querySelector('.expense__date').value;
-    const description = document.querySelector('.expense__description').value
-    const category = document.querySelector('.select__activity').value
+    const description = document.querySelector('.expense__description').value;
+    const category = document.querySelector('.select__activity').value;
     const amount = parseFloat(document.querySelector('.expense__value').value);
+    const divNewCategory = document.querySelector('.div__newCategory');
 
-    const id = idGenerator()
+    if (currentEditId) {
+        const index = expensesArray.findIndex((expense) => expense.id === currentEditId);
+        if (index !== -1) {
+            expensesArray[index] = new Expense(currentEditId, description, date, category, amount);
 
-    budgetStatusShow.classList.remove('hide')
+            localStorage.setItem('expenses', JSON.stringify(expensesArray));
+            renderExpenses();
+            updateExpenseProgress();
+            renderBudgetBalance();
+            clearModalForm();
+            currentEditId = null
+        }
+    } else {
+        const id = idGenerator();
 
-    const newExpense = new Expense(id, description, date, category, amount);
-    expensesArray.push(newExpense);
+        budgetStatusShow.classList.remove('hide');
 
-    localStorage.setItem('expenses', JSON.stringify(expensesArray))
+        const newExpense = new Expense(id, description, date, category, amount);
+        expensesArray.push(newExpense);
 
-    renderExpenses()
-    updateExpenseProgress();
-    renderBudgetBalance();
-    clearModalForm();
+        localStorage.setItem('expenses', JSON.stringify(expensesArray));
 
-})
+        divNewCategory.classList.add('hide');
+
+        renderExpenses();
+        updateExpenseProgress();
+        renderBudgetBalance();
+        clearModalForm();
+        currentEditId = null
+    }
+    location.reload(); //Se recarga la pagina
+});
+
 
 const descriptionInput = document.querySelector('.expense__description');
 const categoryInput = document.querySelector('.select__activity');
@@ -155,6 +183,10 @@ const renderExpenses = () => {
 
     expensesList.innerHTML = ''
 
+    //Aqui se actuiliza el expensesArray
+    selectAction()
+
+
     expensesArray.forEach((expense) => {
         const expenseItem = document.createElement('div')
         expenseItem.classList.add('expense_item')
@@ -167,17 +199,19 @@ const renderExpenses = () => {
             <p class="item__amount">Monto: $${parseFloat(expense.amount).toFixed(2)}</p>
             <div class="divIcons">
                 <p class="item__delete" data-id="${expense.id}">Borrar</p>
-                <p class="item__edit">Editar</p>
+                <p class="item__edit" data-id="${expense.id}">Editar</p>
             </div>
         </div>    `
 
             expensesList.appendChild(expenseItem);
     })
 
+    
     const totalExpensed = document.querySelector('.total__expenses')
     totalExpensed.textContent = `Total de gastos: $${totalAmount.toFixed(2)}`;
 
     assignDeleteEvent();
+    assignEditEvent();
 }
 
 //Función que calcula el total de la cantidad de los gastos
@@ -197,7 +231,6 @@ const updateExpenseProgress = () => {
 
 //Función que calcula el presupuesto que no se ha usado, el balance
 const budgetBalanceCal = () => {
-    console.log('Budget Value:', window.budgetValue);
     let totalAmount = calculateTotalExpenses();
     let budget2 = parseFloat(window.budgetValue) || 1; // Asegúrate de convertir a número
     
@@ -222,18 +255,46 @@ const renderBudgetBalance = () => {
 //Función para crea el array de todos los botones delete__expense y detecta a que boton se le da click
 const assignDeleteEvent = () => {
     const deleteButtons = document.querySelectorAll('.item__delete');
-
+    
     deleteButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
             const id = Number(event.target.getAttribute('data-id')); // Asegúrate de que sea un número
             deleteExpense(id);
+            location.reload()
         });
     });
 };
 
+const assignEditEvent = () => {
+    const editButtons = document.querySelectorAll('.item__edit')
+
+    editButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            const id = Number(e.target.getAttribute('data-id'));
+            editExpense(id)
+        })
+    })
+}
+
+const editExpense = (id) => {
+    const expenseToEdit = expensesArray.find(expense => expense.id === id)
+        
+    if (expenseToEdit) {
+        document.querySelector('.expense__description').value = expenseToEdit.description;
+        document.querySelector('.select__activity').value = expenseToEdit.category;
+        document.querySelector('.expense__value').value = expenseToEdit.amount;
+        document.querySelector('.expense__date').value = expenseToEdit.date;
+    
+        backModalSection.classList.add('showFlex');
+        modalSection.classList.add('show');
+    
+        currentEditId = id;
+    }
+}
 //Función que filtra el array de gastos y solo deja los gastos que no fueron seleccionados para eliminar
 const deleteExpense = (id) => {
-    expensesArray = expensesArray.filter(expense => expense.id !== id); // Filtrar por ID
+    expensesArray = expensesArray.filter((expense) => expense.id !== id); // Filtrar por ID
+    localStorage.setItem('expenses', JSON.stringify(expensesArray)); // Actualizar localStorage
     renderExpenses(); // Renderizar de nuevo los gastos actualizados
     updateExpenseProgress(); // Actualizar el progreso de los gastos después de borrar
     renderBudgetBalance();
@@ -279,6 +340,7 @@ const clearModalForm = () => {
     document.querySelector('.select__activity').value = ''
     document.querySelector('.expense__value').value = ''
     document.querySelector('.submit__data').classList.add('hide')
+    document.querySelector('.new__categoryText').value = ''
 }
 
 const resetApp = () => {
@@ -333,9 +395,283 @@ document.addEventListener('DOMContentLoaded', () => {
         renderExpenses();
         updateExpenseProgress();
         renderBudgetBalance();
-    }
+        renderExpensesChart();
+    }  
 });
 
 
+//Función donde se asigna el evento click a selector de categoria de gasto y se pregunta si se dió click en crear categoria
+document.addEventListener('DOMContentLoaded', () => {
+    const selectActivity = document.querySelector('.select__activity');
+    const divNewCategory = document.querySelector('.div__newCategory');
+    const newCategoryButton = document.querySelector('.new__categoryButton')
 
+    // Cargar categorías desde localStorage al cargar la página
+    loadCategories();
 
+    selectActivity.addEventListener('change', (event) => {
+        if (event.target.value === 'createCategory') {
+            divNewCategory.classList.remove('hide');
+        }
+    });
+
+    newCategoryButton.addEventListener('click', () => {
+        addCategory()
+        divNewCategory.classList.add('hide')
+        document.querySelector('.select__activity').value = ''
+    })
+});
+
+const displayGraphButton = document.querySelector('.graph__displayButton')
+const closeGraphIcon = document.querySelector('.close__graphIcon')
+const divGraph = document.querySelector('.div__chart')
+
+//Función que crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
+const addCategory = () => {
+    const newCategory = document.createElement('option')
+    const selectActivity = document.querySelector('.select__activity');
+    const newCategoryText = document.querySelector('.new__categoryText')
+
+    selectActivity.appendChild(newCategory)
+    newCategory.classList.add('new__category')
+    newCategory.id = "optionId"
+    newCategory.setAttribute('value', newCategoryText.value)
+    newCategory.textContent = newCategoryText.value
+
+    // Guardar la nueva categoría en localStorage
+    saveCategory(newCategoryText.value);
+
+    copyingCategories()
+}
+
+// Función para guardar una categoría en localStorage
+const saveCategory = (category) => {
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+    categories.push(category);
+    localStorage.setItem('categories', JSON.stringify(categories));
+};
+
+// Función para cargar categorías desde localStorage
+const loadCategories = () => {
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+    const selectActivity = document.querySelector('.select__activity');
+    const selectCategory = document.querySelector('.select__category')
+
+    categories.forEach(category => {
+        const newCategory = document.createElement('option');
+        newCategory.classList.add('new__category')
+        newCategory.setAttribute('value', category); // Establece el valor de la opción
+        newCategory.id = "optionId"
+        newCategory.textContent = category; // Establece el texto de la opción
+        selectActivity.appendChild(newCategory);
+        selectCategory.appendChild(newCategory)
+    });
+};
+
+//Función que ordenas los gastos por fecha en orden cronológico
+const orderExpensesDate = () => {
+    expensesArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesDateInverse = () => {
+    expensesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesAmountDescendent = () => {
+    expensesArray.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
+}
+
+//Función que ordenas los gastos por fecha en orden cronológico inverso
+const orderExpensesAmountAscendent = () => {
+    expensesArray.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount));
+}
+
+//Función que hace la logica para ordenar los gastos de acuerdo a la seleccion que se haga
+const selectAction = () => {
+    const orderSelector = document.querySelector('.select__order')
+
+    orderSelector.addEventListener('change', (event) => {
+        if (event.target.value === 'chronologicTime') {
+            orderExpensesDate()
+        } else if (event.target.value === 'inverseChronologic') {
+            orderExpensesDateInverse()
+        } else if (event.target.value === 'descendentAmount') {
+            orderExpensesAmountDescendent()
+        } else if (event.target.value === 'ascendentAmount') {
+            orderExpensesAmountAscendent()
+        }
+        renderExpenses()
+     });
+}
+
+const getExpensesByCategory = () => {
+  const categories = {};
+  expensesArray.forEach((expense) => {
+    if (!categories[expense.category]) {
+      categories[expense.category] = 0;
+    }
+    categories[expense.category] += parseFloat(expense.amount);
+  });
+  return categories;
+};
+
+const renderExpensesChart = () => {
+  const ctx = document.getElementById('expensesChart').getContext('2d');
+  const expensesByCategory = getExpensesByCategory();
+  const labels = Object.keys(expensesByCategory);
+  const data = Object.values(expensesByCategory);
+
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Gastos por categoría',
+        data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 10,
+      }],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+};
+
+const divChart = document.querySelector('.div__chart')
+const chartSection = document.querySelector('.chart__section')
+const closeChartIcon = document.querySelector('.close__chartIcon')
+const chartIcon = document.querySelector('.chart__icon')
+
+chartIcon.addEventListener('click', () => {
+    chartSection.classList.add('showBackChart')
+    divChart.classList.add('showChart')
+})
+
+closeChartIcon.addEventListener('click', () => {
+    chartSection.classList.remove('showBackChart')
+    divChart.classList.remove('showChart')
+})
+
+const copyingCategories = () => {
+    //Copiando los options del select del modal de categorias
+    const newSelect = document.querySelector('.select__category')
+    const categoryOptions = document.querySelectorAll('.new__category')
+    
+    categoryOptions.forEach((option) => {
+     const newOption = option.cloneNode(true)
+        newSelect.appendChild(newOption)
+    })
+}
+
+const copyingdefaultCategories = () => {
+    const newSelect = document.querySelector('.select__category')
+    const defaultCaterories = document.querySelectorAll('.categoryDefault')
+    defaultCaterories.forEach((option) => {
+        const categoriesInNewSelect = option.cloneNode(true)
+        newSelect.appendChild(categoriesInNewSelect)
+    })
+}
+
+copyingdefaultCategories()
+
+let filteredData = []
+
+//Funcion que filtra los gastos por categoria creando un nuevo arreglo
+const filterByCategory = () => {
+    const categorySelection = document.querySelector('.select__category')
+    const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory')
+    const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses')
+    categorySelection.addEventListener('change', function() {
+        const selectedCategory = this.value
+        console.log(expensesArray)
+        console.log(selectedCategory)
+        const filteredData = expensesArray.filter(item => {
+            console.log(item.category);
+            return item.category === selectedCategory;
+        });
+
+        modalExpensesFilteredByCategory.classList.add('showFilteredModal')
+        divBackFilteredExpenses.classList.add('showBackFilteredModal')
+        document.body.classList.add('modal-open'); //Desactiva el scroll detras del modal
+        
+        console.log(filteredData)
+        renderFilteredExpenses(filteredData)
+    })
+}
+
+const closeModalFilteredExpensesIcon = document.querySelector('.close__modalFilteredExpensesIcon')
+closeModalFilteredExpensesIcon.addEventListener('click', () => {
+    const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory')
+    const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses')
+    const categorySelection = document.querySelector('.select__category')
+
+    modalExpensesFilteredByCategory.classList.remove('showFilteredModal')
+    divBackFilteredExpenses.classList.remove('showBackFilteredModal')
+    document.body.classList.remove('modal-open');  // Reactiva el scroll detras del modal
+    categorySelection.value = ''
+})
+
+filterByCategory()
+
+const renderFilteredExpenses = (array) => {
+    const modalExpensesFilteredByCategory = document.querySelector('.div__FilteredExpenses')
+
+    let totalPerCategory = array.reduce((total, expense) => {
+        return total + parseFloat(expense.amount);
+    }, 0); // El valor inicial del acumulador es 0
+
+    modalExpensesFilteredByCategory.innerHTML = ''
+
+    if(array.length === 0){
+        const expenseItemFiltered = document.createElement('div')
+            expenseItemFiltered.classList.add('expense_filtered')
+            expenseItemFiltered.innerHTML = `
+            <div class="div__FilteredItem">
+                <p class="item__description">No hay gastos de esa categoría</p>
+            </div>    `
+    
+            modalExpensesFilteredByCategory.appendChild(expenseItemFiltered);
+    } else {
+        array.forEach((expense) => {
+            const expenseItemFiltered = document.createElement('div')
+            expenseItemFiltered.classList.add('expense_filtered')
+            expenseItemFiltered.innerHTML = `
+            <div class="div__FilteredItem">
+                <p class="item__id">ID: ${expense.id}</p>
+                <p class="item__description">Descripción: ${expense.description}</p>
+                <p class="item__date">Fecha: ${expense.date}</p>
+                <p class="item__category">Categoría: ${expense.category}</p>
+                <p class="item__amount">Monto: $${parseFloat(expense.amount).toFixed(2)}</p>
+            </div>    `
+    
+            modalExpensesFilteredByCategory.appendChild(expenseItemFiltered);
+        })
+    
+        const totalExpensePerCategory = document.querySelector('.total__expensePerCategory')
+        totalExpensePerCategory.textContent = `Total de gastos: $${totalPerCategory.toFixed(2)}`;
+    }
+
+    
+}

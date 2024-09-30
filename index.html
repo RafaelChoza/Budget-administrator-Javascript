@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
     <link href="https://fonts.cdnfonts.com/css/helmet?styles=25304" rel="stylesheet">
     <title>Administrador de Presupuesto</title>
 </head>
@@ -22,7 +22,10 @@
             <h2 class="budget__title">Presupuesto</h2>
             <input class="input__budget" type="number" placeholder="Ingresa el valor del presupuesto" required>
             <input class="submit__budget hide" type="submit">
-            <p class="display__budget">El presupuesto ingresado es de: </p>
+            <div class="div__budgetDisplayEdit">
+                <p class="display__budget">El presupuesto ingresado es de: </p>
+                <button class="edit__budgetButton">Editar Presupuesto</button>
+            </div>
             <p class="budget__balance">El presupuesto restante es de: </p>
             <p class="over__budget hide">presupuesto fue rebasado</p>
         </section>
@@ -54,15 +57,15 @@
                 <form class="form"></form>
                 <label class="modal__activitiesTitle" for="activities">Elige una opción de la razón del gasto</label>
                 <select class="select__activity" name="activities" required>
-                    <option value="" disabled selected>Selecciona una opción</option>
-                    <option value="diversion">Diversión</option>
-                    <option value="educacion">Educación</option>
-                    <option value="trabajo">Trabajo</option>
-                    <option value="casa">Casa</option>
-                    <option value="comida">Comida</option>
-                    <option value="transporte">Transporte</option>
-                    <option value="credito">Crédito</option>
-                    <option value="otra">Otra</option>
+                    <option class="categoryDefault" value="" disabled selected>Selecciona una opción</option>
+                    <option class="categoryDefault" value="createCategory" class="creat__newCategory">-CREAR CATEGORIA-</option>
+                    <option class="categoryDefault" value="diversion">Diversión</option>
+                    <option class="categoryDefault" value="educacion">Educación</option>
+                    <option class="categoryDefault" value="trabajo">Trabajo</option>
+                    <option class="categoryDefault" value="casa">Casa</option>
+                    <option class="categoryDefault" value="comida">Comida</option>
+                    <option class="categoryDefault" value="transporte">Transporte</option>
+                    <option class="categoryDefault" value="credito">Crédito</option>
                 </select>
                 <div class="form2">
                     <div class="div_expenseValue">
@@ -77,6 +80,15 @@
 
                 </div>
                 </form>
+                <div class="div__newCategory hide">
+                    <h3>Nueva Categoría</h3>
+                    <p>Aquí puedes crear tus propias categorías.</p>
+                    <p>Escribe el nombre de la categoria y da clic en Enviar</p>
+                    <p>Lo puedes hacer las veces que sean necesarias</p>
+                    <input class="new__categoryText" type="text" placeholder="Escribe el nombre de la categoría"
+                        name="newCategory">
+                    <input class="new__categoryButton" type="submit" name="newCategory">
+                </div>
             </section>
         </div>
 
@@ -84,20 +96,67 @@
         <section class="activities__section">
             <div class="div__expensesHeader">
                 <h2 class="expenses__title">Resumen de gastos</h2>
+                <div class="selectors">
+                    <div>
+                        <span>Ordenar Gastos por:</span>
+                        <select class="select__order" name="orderExpenses" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="chronologicTime">Orden Cronológico</option>
+                            <option value="inverseChronologic">Cronológica inversa</option>
+                            <option value="descendentAmount">Monto mayor a menor</option>
+                            <option value="ascendentAmount">Monto menor a mayor</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>Filtrar Gastos por categoría</span>
+                        <select class="select__category" name="filterCategory" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                        
+                          
+                        </select>
+                    </div>
+                </div>
+            
                 <p class="total__expenses">Total de gastos: $0.00</p>
             </div>
             
             <div class="div__expenses">
-
-
+               
             </div>
-            
         </section>
 
         <div>
             <p class="add__expenseIcon hide">+</p>
             <p class="reset__icon">Resetear APP</p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="chart__icon">
+                <path
+                    d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+            </svg>
         </div>
+
+        <section class="chart__section">
+            <div class="div__chart">
+                <p class="close__chartIcon">Cerrar</p>
+                <h2>Grafica de Gastos</h2>
+                <canvas id="expensesChart" width="350" height="400"></canvas>
+            </div>
+        </section>
+
+        <section class="modal__expensesFilteredByCategory">
+            <div class="div__toCenter">
+                <div class="div__backFilteredExpenses">
+                    <div class="div__IconCloseExpensesTotal">
+                        <p class="close__modalFilteredExpensesIcon">Cerrar</p>
+                        <p class="total__expensePerCategory">Total de gasto por categoría = $0.00</p>
+                    </div>
+                    <h2>Gastos Filtrados por Categoría</h2>
+                    <div class="div__FilteredExpenses">
+                        //Aqui de renderizan los gastos filtrados
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script src="js/main.js"></script>
