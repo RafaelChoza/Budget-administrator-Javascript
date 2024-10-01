@@ -53,7 +53,7 @@
                         placeholder="Ingrese descripción del gasto">
                 </div>
                 <label for="expense-date">Fecha del gasto:</label>
-                <input type="text" id="expense-date" class="expense__date" placeholder="Selecciona fecha">
+                <input type="date" id="expense-date" class="expense__date" placeholder="Selecciona fecha">
                 <form class="form"></form>
                 <label class="modal__activitiesTitle" for="activities">Elige una opción de la razón del gasto</label>
                 <select class="select__activity" name="activities" required>
@@ -115,6 +115,14 @@
                           
                         </select>
                     </div>
+                    <d
+                        <span>Filtras gastos por fecha de:</span>
+                        <div class="div__dateRange">
+                            <input type="date" class="date__init" placeholder="Fecha de inicio">
+                            <span> a </span>
+                            <input type="date" class="date__end" placeholder="Fecha Final">
+                        </div>
+                    </div>
                 </div>
             
                 <p class="total__expenses">Total de gastos: $0.00</p>
@@ -149,7 +157,7 @@
                         <p class="close__modalFilteredExpensesIcon">Cerrar</p>
                         <p class="total__expensePerCategory">Total de gasto por categoría = $0.00</p>
                     </div>
-                    <h2>Gastos Filtrados por Categoría</h2>
+                    <h2>Gastos Filtrados</h2>
                     <div class="div__FilteredExpenses">
                         //Aqui de renderizan los gastos filtrados
                     </div>

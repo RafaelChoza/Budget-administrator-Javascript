@@ -4,7 +4,7 @@ const budgetStatusShow = document.querySelector('.budget__state')
 const budgetBalance = document.querySelector('.budget__balance')
 
 
-budgetInput.addEventListener('input', function() {
+budgetInput.addEventListener('input', function () {
     const budgetValue = parseFloat(budgetInput.value);
     const inputValue = budgetInput.value.trim();
 
@@ -24,27 +24,27 @@ budgetInput.addEventListener('input', function() {
 
 });
 
-submitButton.addEventListener('click', function() {
+submitButton.addEventListener('click', function () {
     const budgetValue = parseFloat(budgetInput.value);
 
     localStorage.setItem('budget', budgetValue)
 
     const displayBudget = document.querySelector('.display__budget');
     const displayBalance = document.querySelector('.budget__balance')
-    
+
     displayBudget.textContent = `El presupuesto ingresado es de: $ ${budgetValue.toFixed(2)}`;
     displayBalance.textContent = `El presupuesto restante es de: $${budgetBalanceCal().toFixed(2)}`;
 
 
     submitButton.classList.add('hide')
     budgetInput.classList.add('hide')
-    
+
     addExpenseIcon.classList.remove('hide')
 
     window.budgetValue = budgetValue.toFixed(2);
 
     location.reload(); //Se recarga la pagina
-    
+
 });
 
 const editBudgeButton = document.querySelector('.edit__budgetButton')
@@ -160,13 +160,14 @@ const validateForm = () => {
     }
 };
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     flatpickr("#expense-date", {
         dateFormat: "d-M-Y", // Formato de fecha
         altInput: true,      // Opción para mostrar una fecha amigable (si deseas)
         altFormat: "F j, Y", // Formato amigable que se muestra
         locale: "es"         // Cambia a español (opcional)
     });
+
 });
 
 
@@ -203,10 +204,10 @@ const renderExpenses = () => {
             </div>
         </div>    `
 
-            expensesList.appendChild(expenseItem);
+        expensesList.appendChild(expenseItem);
     })
 
-    
+
     const totalExpensed = document.querySelector('.total__expenses')
     totalExpensed.textContent = `Total de gastos: $${totalAmount.toFixed(2)}`;
 
@@ -233,7 +234,7 @@ const updateExpenseProgress = () => {
 const budgetBalanceCal = () => {
     let totalAmount = calculateTotalExpenses();
     let budget2 = parseFloat(window.budgetValue) || 1; // Asegúrate de convertir a número
-    
+
     let budgetBalance = budget2 - totalAmount;
     return budgetBalance;
 };
@@ -241,7 +242,7 @@ const budgetBalanceCal = () => {
 //Función que renderiza el presupuesto restante y tambien la función manda mensaje si ya se pasó el presupuesto
 const renderBudgetBalance = () => {
     budgetBalance.textContent = `El presupuesto restante es de: $${budgetBalanceCal().toFixed(2)}`;
-    
+
     if (budgetBalanceCal() < 0) {
         const overBudgetMsg = document.querySelector('.over__budget')
         overBudgetMsg.textContent = `** Presupuesto rebasado por la cantidad de $${budgetBalanceCal().toFixed(2)}  **`
@@ -255,7 +256,7 @@ const renderBudgetBalance = () => {
 //Función para crea el array de todos los botones delete__expense y detecta a que boton se le da click
 const assignDeleteEvent = () => {
     const deleteButtons = document.querySelectorAll('.item__delete');
-    
+
     deleteButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
             const id = Number(event.target.getAttribute('data-id')); // Asegúrate de que sea un número
@@ -278,16 +279,16 @@ const assignEditEvent = () => {
 
 const editExpense = (id) => {
     const expenseToEdit = expensesArray.find(expense => expense.id === id)
-        
+
     if (expenseToEdit) {
         document.querySelector('.expense__description').value = expenseToEdit.description;
         document.querySelector('.select__activity').value = expenseToEdit.category;
         document.querySelector('.expense__value').value = expenseToEdit.amount;
         document.querySelector('.expense__date').value = expenseToEdit.date;
-    
+
         backModalSection.classList.add('showFlex');
         modalSection.classList.add('show');
-    
+
         currentEditId = id;
     }
 }
@@ -320,16 +321,16 @@ function updateProgress(percent) {
         progressIcon.textContent = '😁';
         progressFill.style.backgroundColor = 'green'
     } else if (percent > 30 && percent < 66) {
-        progressIcon.textContent = '😊'; 
+        progressIcon.textContent = '😊';
         progressFill.style.backgroundColor = 'green'
     } else if (percent > 65 && percent < 81) {
-        progressIcon.textContent = '😕'; 
+        progressIcon.textContent = '😕';
         progressFill.style.backgroundColor = 'green'
     } else if (percent > 80 && percent < 100) {
-        progressIcon.textContent = '😢'; 
+        progressIcon.textContent = '😢';
         progressFill.style.backgroundColor = 'red'
-    } else if (percent =>99) {
-        progressIcon.textContent = '😭'; 
+    } else if (percent => 99) {
+        progressIcon.textContent = '😭';
         progressFill.style.backgroundColor = 'red'
     }
 }
@@ -355,7 +356,7 @@ const resetApp = () => {
     document.querySelector('.budget__balance').textContent = '';
     document.querySelector('.total__expenses').textContent = '';
     submitButton.classList.add('hide');
-    
+
     // Reiniciar la barra de progreso
     updateProgress(0);
 
@@ -396,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateExpenseProgress();
         renderBudgetBalance();
         renderExpensesChart();
-    }  
+    }
 });
 
 
@@ -503,60 +504,60 @@ const selectAction = () => {
             orderExpensesAmountAscendent()
         }
         renderExpenses()
-     });
+    });
 }
 
 const getExpensesByCategory = () => {
-  const categories = {};
-  expensesArray.forEach((expense) => {
-    if (!categories[expense.category]) {
-      categories[expense.category] = 0;
-    }
-    categories[expense.category] += parseFloat(expense.amount);
-  });
-  return categories;
+    const categories = {};
+    expensesArray.forEach((expense) => {
+        if (!categories[expense.category]) {
+            categories[expense.category] = 0;
+        }
+        categories[expense.category] += parseFloat(expense.amount);
+    });
+    return categories;
 };
 
 const renderExpensesChart = () => {
-  const ctx = document.getElementById('expensesChart').getContext('2d');
-  const expensesByCategory = getExpensesByCategory();
-  const labels = Object.keys(expensesByCategory);
-  const data = Object.values(expensesByCategory);
+    const ctx = document.getElementById('expensesChart').getContext('2d');
+    const expensesByCategory = getExpensesByCategory();
+    const labels = Object.keys(expensesByCategory);
+    const data = Object.values(expensesByCategory);
 
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Gastos por categoría',
-        data,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 10,
-      }],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Gastos por categoría',
+                data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                ],
+                borderWidth: 10,
+            }],
         },
-      },
-    },
-  });
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
 };
 
 const divChart = document.querySelector('.div__chart')
@@ -578,9 +579,9 @@ const copyingCategories = () => {
     //Copiando los options del select del modal de categorias
     const newSelect = document.querySelector('.select__category')
     const categoryOptions = document.querySelectorAll('.new__category')
-    
+
     categoryOptions.forEach((option) => {
-     const newOption = option.cloneNode(true)
+        const newOption = option.cloneNode(true)
         newSelect.appendChild(newOption)
     })
 }
@@ -603,7 +604,7 @@ const filterByCategory = () => {
     const categorySelection = document.querySelector('.select__category')
     const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory')
     const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses')
-    categorySelection.addEventListener('change', function() {
+    categorySelection.addEventListener('change', function () {
         const selectedCategory = this.value
         console.log(expensesArray)
         console.log(selectedCategory)
@@ -615,7 +616,7 @@ const filterByCategory = () => {
         modalExpensesFilteredByCategory.classList.add('showFilteredModal')
         divBackFilteredExpenses.classList.add('showBackFilteredModal')
         document.body.classList.add('modal-open'); //Desactiva el scroll detras del modal
-        
+
         console.log(filteredData)
         renderFilteredExpenses(filteredData)
     })
@@ -623,15 +624,22 @@ const filterByCategory = () => {
 
 const closeModalFilteredExpensesIcon = document.querySelector('.close__modalFilteredExpensesIcon')
 closeModalFilteredExpensesIcon.addEventListener('click', () => {
-    const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory')
-    const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses')
-    const categorySelection = document.querySelector('.select__category')
+    const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory');
+    const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses');
+    const categorySelection = document.querySelector('.select__category');
 
-    modalExpensesFilteredByCategory.classList.remove('showFilteredModal')
-    divBackFilteredExpenses.classList.remove('showBackFilteredModal')
-    document.body.classList.remove('modal-open');  // Reactiva el scroll detras del modal
-    categorySelection.value = ''
-})
+    // Cierra el modal
+    modalExpensesFilteredByCategory.classList.remove('showFilteredModal');
+    divBackFilteredExpenses.classList.remove('showBackFilteredModal');
+    document.body.classList.remove('modal-open');  // Reactiva el scroll detrás del modal
+
+    // Limpia el campo de categoría
+    categorySelection.value = '';
+
+    // Limpia los campos de fecha con flatpickr
+    if (dateInitPicker) dateInitPicker.clear();
+    if (dateEndPicker) dateEndPicker.clear();
+});
 
 filterByCategory()
 
@@ -644,15 +652,15 @@ const renderFilteredExpenses = (array) => {
 
     modalExpensesFilteredByCategory.innerHTML = ''
 
-    if(array.length === 0){
+    if (array.length === 0) {
         const expenseItemFiltered = document.createElement('div')
-            expenseItemFiltered.classList.add('expense_filtered')
-            expenseItemFiltered.innerHTML = `
+        expenseItemFiltered.classList.add('expense_filtered')
+        expenseItemFiltered.innerHTML = `
             <div class="div__FilteredItem">
-                <p class="item__description">No hay gastos de esa categoría</p>
+                <p class="item__description">No hay gastos para filtrar</p>
             </div>    `
-    
-            modalExpensesFilteredByCategory.appendChild(expenseItemFiltered);
+
+        modalExpensesFilteredByCategory.appendChild(expenseItemFiltered);
     } else {
         array.forEach((expense) => {
             const expenseItemFiltered = document.createElement('div')
@@ -665,13 +673,78 @@ const renderFilteredExpenses = (array) => {
                 <p class="item__category">Categoría: ${expense.category}</p>
                 <p class="item__amount">Monto: $${parseFloat(expense.amount).toFixed(2)}</p>
             </div>    `
-    
+
             modalExpensesFilteredByCategory.appendChild(expenseItemFiltered);
         })
-    
+
         const totalExpensePerCategory = document.querySelector('.total__expensePerCategory')
         totalExpensePerCategory.textContent = `Total de gastos: $${totalPerCategory.toFixed(2)}`;
     }
+}
+
+let arrayFilteredDate = []
+
+const filterByDate = (array) => {
+    const dateInit = document.querySelector('.date__init');
+    const dateEnd = document.querySelector('.date__end');
+    const modalExpensesFilteredByCategory = document.querySelector('.modal__expensesFilteredByCategory')
+    const divBackFilteredExpenses = document.querySelector('.div__backFilteredExpenses')
+
+    if (dateInit && dateEnd) { // Verificamos que los elementos existan
+        const dateInitValue = dateInit.value;
+        const dateEndValue = dateEnd.value;
+
+        if (dateInitValue && dateEndValue) { // Verificamos que ambas fechas tengan valor
+            const start = new Date(dateInitValue);
+            const end = new Date(dateEndValue);
+
+            const arrayFilteredDate = array.filter(item => {
+                const date = new Date(item.date);
+                return date >= start && date <= end;
+            });
+
+            modalExpensesFilteredByCategory.classList.add('showFilteredModal')
+            divBackFilteredExpenses.classList.add('showBackFilteredModal')
+            document.body.classList.add('modal-open'); //Desactiva el scroll detras del modal
+
+            console.log(arrayFilteredDate);
+            renderFilteredExpenses(arrayFilteredDate);
+            
+        } else {
+            console.log("Por favor, introduce ambas fechas.");
+        }
+    } else {
+        console.error("No se encontraron los elementos de fecha en el DOM.");
+    }
 
     
-}
+};
+
+let dateInitPicker, dateEndPicker;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa flatpickr en los campos de fecha
+    dateInitPicker = flatpickr(".date__init", {
+        dateFormat: "d-M-Y",
+        altInput: true,
+        altFormat: "F j, Y",
+        locale: "es"
+    });
+
+    dateEndPicker = flatpickr(".date__end", {
+        dateFormat: "d-M-Y",
+        altInput: true,
+        altFormat: "F j, Y",
+        locale: "es"
+    });
+
+    const dateInit = document.querySelector('.date__init');
+    const dateEnd = document.querySelector('.date__end');
+
+    if (dateInit && dateEnd) {
+        dateInit.addEventListener('change', () => filterByDate(expensesArray));
+        dateEnd.addEventListener('change', () => filterByDate(expensesArray));
+    } else {
+        console.error("No se encontraron los elementos de fecha en el DOM.");
+    }
+});

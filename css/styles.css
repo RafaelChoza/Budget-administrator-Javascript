@@ -110,6 +110,10 @@ header,
     flex-direction: column;
 }
 
+.selectors {
+    line-height: 2vw;
+}
+
 .reset__icon {
     position: fixed;
     left: 88vw;
@@ -150,7 +154,7 @@ header,
 
 .div__expensesHeader {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between  ;
 }
@@ -504,8 +508,7 @@ header,
     header,
     .modal__activitiesTitle,
     .expense__label,
-    .expense__descriptionTitle,
-    .expenses__title {
+    .expense__descriptionTitle {
         font-size: 2.5vw;
     }
 
@@ -527,7 +530,8 @@ header,
         font-size: 3.5vw;
     }
 
-    .budget__title {
+    .budget__title,
+    .expenses__title {
         font-size: 4vw;
     }
 
@@ -549,6 +553,20 @@ header,
 
     .div__chart {
         width: 80%;
+    }
+
+    .activities__section {
+        width: 90%;
+    }
+
+    .div__dateRange {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .div__dateRange input {
+        margin: 1vw;
     }
 
     .show__chartIcon {
@@ -573,5 +591,9 @@ header,
 
     .div__newCategory p {
         font-size: 3vw;
+    }
+
+    .selectors {
+        line-height: 8vw;
     }
 }
