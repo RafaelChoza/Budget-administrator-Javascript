@@ -374,7 +374,23 @@ const resetApp = () => {
 //Aqui se agrega el evento click al icono de resetear la APP
 const resetAppButton = document.querySelector('.reset__icon')
 resetAppButton.addEventListener('click', () => {
-    resetApp()
+    const divResetAppQuestion = document.querySelector('.div__resetAppQuestion')
+    const divTitleAndButtonResetApp = document.querySelector('.div__titleAndButtonResetApp')
+
+    divResetAppQuestion.classList.add('showQuestion')
+    divTitleAndButtonResetApp.classList.add('showQuestion')
+
+    document.querySelector('.reset__buttonYes').addEventListener('click', () => {
+        resetApp()
+    })
+
+    document.querySelector('.reset__buttonNo').addEventListener('click', () => {
+        divResetAppQuestion.classList.remove('showQuestion')
+        divTitleAndButtonResetApp.classList.remove('showQuestion')
+    })
+
+
+    
 })
 
 document.addEventListener('DOMContentLoaded', () => {
