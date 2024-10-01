@@ -89,8 +89,9 @@ header,
     border-radius: 1vw;
 }
 
-.submit__data, .submit__budget {
-    width: 10vw;
+.submit__data, .submit__budget, .new__categoryButton {
+    width: 20vw;
+    height: 3vw;
     background-color: #0000ff;
     color: #ffffff;
     border-radius: 1vw;
@@ -100,7 +101,7 @@ header,
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    width: 100%;
     margin-top: 1vw;
     width: fit-content;
 }
@@ -398,7 +399,7 @@ header,
 .chart__icon {
     position: fixed;
     left: 88vw;
-    top: 20vw;
+    top: 15vw;
     fill: #fff;
     width: 3vw;
     background-color: #0000ff;
@@ -517,7 +518,7 @@ header,
 
 .reset__buttonNo, .reset__buttonYes {
     margin: 1vw;
-    padding: 1vw;
+    padding: 1vw 6vw 1vw 6vw;
     background-color: #0000ff;
     color: #fff;
     font-weight: 600;
@@ -525,6 +526,7 @@ header,
     border-radius: 1vw;
     cursor: pointer;
     transition: all .25s ease;
+    font-size: 1.5vw;
 }
 
 .reset__buttonNo:hover, .reset__buttonYes:hover {
@@ -542,8 +544,7 @@ header,
 
     .submit__data,
     .submit__budget,
-    .reset__icon,
-    .close__modalIcon {
+    .reset__icon {
         font-size: 2vw;
     }
 
@@ -573,7 +574,8 @@ header,
     .item__amount,
     .item__date,
     .display__budget,
-    .budget__balance {
+    .budget__balance,
+    .close__modalIcon {
         font-size: 3.5vw;
     }
 
@@ -643,4 +645,26 @@ header,
     .selectors {
         line-height: 8vw;
     }
+
+    .div__titleAndButtonResetApp {
+        width: 90%;
+    }
+
+    .reset__buttonNo, .reset__buttonYes {
+        font-size: 3.5vw;
+    }
+
+    .submit__data, .submit__budget, .new__categoryButton {
+        width: 20vw;
+        height: 5.5vw;
+    }
+
+    .select__activity {
+        width: 35vw;
+    }
+
+    .expense__value {
+        width: 45vw;
+    }
+    
 }
