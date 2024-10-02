@@ -568,8 +568,24 @@ const renderExpensesChart = () => {
         },
         options: {
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Categorías',
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
                 y: {
                     beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Monto en $ pesos',
+                    font: {
+                        size: 12
+                        }   
+                    }
                 },
             },
         },

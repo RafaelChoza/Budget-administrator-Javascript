@@ -399,7 +399,7 @@ header,
 .chart__icon {
     position: fixed;
     left: 88vw;
-    top: 15vw;
+    top: 25vw;
     fill: #fff;
     width: 3vw;
     background-color: #0000ff;
@@ -622,7 +622,7 @@ header,
         font-size: 3vw;
         width: fit-content;
         left: 77vw;
-        top: 10vw;
+        top: 1vw;
     }
 
     .chart__section h2 {
@@ -635,7 +635,7 @@ header,
     }
 
     .chart__icon {
-        top: 155vw;
+        top: 115vw;
     }
 
     .div__newCategory p {
