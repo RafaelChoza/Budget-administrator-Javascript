@@ -569,6 +569,11 @@ const renderExpensesChart = () => {
         options: {
             scales: {
                 x: {
+                    ticks: {
+                        font: {
+                            size: 10,
+                        }
+                    },
                     title: {
                         display: true,
                         text: 'Categorías',
