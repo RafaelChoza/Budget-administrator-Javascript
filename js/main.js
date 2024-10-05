@@ -480,8 +480,9 @@ const loadCategories = () => {
         newCategory.setAttribute('value', category); // Establece el valor de la opción
         newCategory.id = "optionId"
         newCategory.textContent = category; // Establece el texto de la opción
+        const newCategoryClone = newCategory.cloneNode(true);
         selectActivity.appendChild(newCategory);
-        selectCategory.appendChild(newCategory)
+        selectCategory.appendChild(newCategoryClone)
     });
 };
 
