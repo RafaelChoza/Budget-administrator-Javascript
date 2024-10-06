@@ -443,23 +443,39 @@ const displayGraphButton = document.querySelector('.graph__displayButton')
 const closeGraphIcon = document.querySelector('.close__graphIcon')
 const divGraph = document.querySelector('.div__chart')
 
-//Función que crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
+//Función que valida si la categoria a crear existe y si no, crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
 const addCategory = () => {
-    const newCategory = document.createElement('option')
+    const newCategoryText = document.querySelector('.new__categoryText');
     const selectActivity = document.querySelector('.select__activity');
-    const newCategoryText = document.querySelector('.new__categoryText')
+    const newCategoryValue = newCategoryText.value.trim(); // Elimina espacios en blanco
 
-    selectActivity.appendChild(newCategory)
-    newCategory.classList.add('new__category')
-    newCategory.id = "optionId"
-    newCategory.setAttribute('value', newCategoryText.value)
-    newCategory.textContent = newCategoryText.value
+    // Verificar si la categoría ya existe
+    let categoryExists = false;
+    const options = selectActivity.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value.toLowerCase() === newCategoryValue.toLowerCase()) {
+            categoryExists = true;
+        }
+    });
 
-    // Guardar la nueva categoría en localStorage
-    saveCategory(newCategoryText.value);
+    if (categoryExists) {
+        alert('Esta categoría ya existe');
+    } else {
+        // Crear la nueva categoría si no existe
+        const newCategory = document.createElement('option');
+        newCategory.classList.add('new__category');
+        newCategory.id = "optionId";
+        newCategory.setAttribute('value', newCategoryValue);
+        newCategory.textContent = newCategoryValue;
 
-    copyingCategories()
-}
+        selectActivity.appendChild(newCategory);
+
+        // Guardar la nueva categoría en localStorage
+        saveCategory(newCategoryValue);
+
+        copyingCategories();
+    }
+};
 
 // Función para guardar una categoría en localStorage
 const saveCategory = (category) => {
