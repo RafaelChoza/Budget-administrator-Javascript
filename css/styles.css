@@ -133,6 +133,7 @@ header,
 }
 
 .add__expenseIcon {
+    border: .3vw solid #000000;
     background-color: #0000ff;
     color: #ffffff;
     font-size: 5vw;
@@ -396,10 +397,29 @@ header,
     display: flex;
 }
 
-.chart__icon {
+.filter__icon {
+    border: .3vw solid #000000;
     position: fixed;
     left: 88vw;
-    top: 25vw;
+    top: 15vw;
+    fill: #fff;
+    width: 3vw;
+    background-color: #0000ff;
+    padding: 2.5vw;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+.filter__icon:hover {
+    transform: scale(1.1);
+}
+
+.chart__icon {
+    border: .3vw solid #000000;
+    position: fixed;
+    left: 88vw;
+    top: 24vw;
     fill: #fff;
     width: 3vw;
     background-color: #0000ff;
@@ -537,6 +557,55 @@ header,
     display: flex;
 }
 
+
+
+
+
+
+.div__backMssDelete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div__messDelete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border: 10px solid #0000ff;
+    border-radius: 2vw;
+    padding: 1vw;
+    width: 40%;
+}
+
+.button__deleteYes, .button__deleteNo {
+    margin: 1vw;
+    padding: 1vw 6vw 1vw 6vw;
+    background-color: #0000ff;
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid #fff;
+    border-radius: 1vw;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-size: 1.5vw;
+}
+
+.button__deleteYes:hover, .button__deleteNo:hover {
+    transform: scale(1.1);
+}
+
 @media (max-width: 600px) {
     .modal__section {
         width: 80vw;
@@ -666,5 +735,28 @@ header,
     .expense__value {
         width: 45vw;
     }
+
+    .div__backMssDelete {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     
+    .div__messDelete {
+        width: 90%;
+    }
+    
+    .button__deleteYes, .button__deleteNo {
+        font-size: 5vw;
+        width: 30%;
+    }
 }
