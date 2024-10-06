@@ -253,18 +253,54 @@ const renderBudgetBalance = () => {
     }
 };
 
-//Función para crea el array de todos los botones delete__expense y detecta a que boton se le da click
+//Función para crea el array de todos los botones delete__expense y detecta a que boton se le da click y pregunta si sedese eliminarlo
 const assignDeleteEvent = () => {
     const deleteButtons = document.querySelectorAll('.item__delete');
 
     deleteButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
+            // Crear el modal de confirmación
+            const divBackMessDelete = document.createElement('div');
+            divBackMessDelete.classList.add('div__backMssDelete');
+            const divMessDelete = document.createElement('div');
+            divMessDelete.classList.add('div__messDelete');
+            const question = document.createElement('h3');
+            question.classList.add('title__divMessDelete');
+            question.textContent = '¿Seguro que desea borrar este gasto?'; // Texto de confirmación
+
+            const buttonYes = document.createElement('button');
+            buttonYes.classList.add('button__deleteYes');
+            buttonYes.textContent = 'Sí';
+
+            const buttonNo = document.createElement('button');
+            buttonNo.classList.add('button__deleteNo');
+            buttonNo.textContent = 'No';
+
+            // Añadir los elementos al DOM
+            const main = document.querySelector('main');
+            main.appendChild(divBackMessDelete);
+            divBackMessDelete.appendChild(divMessDelete);
+            divMessDelete.appendChild(question);
+            divMessDelete.appendChild(buttonYes);
+            divMessDelete.appendChild(buttonNo);
+
+            // Obtener el ID del elemento a eliminar
             const id = Number(event.target.getAttribute('data-id')); // Asegúrate de que sea un número
-            deleteExpense(id);
-            location.reload()
+
+            // Asignar eventos a los botones
+            buttonYes.addEventListener('click', () => {
+                deleteExpense(id); // Eliminar el gasto
+                divBackMessDelete.remove(); // Cerrar el modal
+                location.reload(); // Recargar la página después de la eliminación
+            });
+
+            buttonNo.addEventListener('click', () => {
+                divBackMessDelete.remove(); // Cerrar el modal sin eliminar
+            });
         });
     });
 };
+
 
 const assignEditEvent = () => {
     const editButtons = document.querySelectorAll('.item__edit')
@@ -390,7 +426,7 @@ resetAppButton.addEventListener('click', () => {
     })
 
 
-    
+
 })
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -443,23 +479,39 @@ const displayGraphButton = document.querySelector('.graph__displayButton')
 const closeGraphIcon = document.querySelector('.close__graphIcon')
 const divGraph = document.querySelector('.div__chart')
 
-//Función que crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
+//Función que valida si la categoria a crear existe y si no, crea la nueva categoría y se añade al DOM con el nombre de categoria personalizado
 const addCategory = () => {
-    const newCategory = document.createElement('option')
+    const newCategoryText = document.querySelector('.new__categoryText');
     const selectActivity = document.querySelector('.select__activity');
-    const newCategoryText = document.querySelector('.new__categoryText')
+    const newCategoryValue = newCategoryText.value.trim(); // Elimina espacios en blanco
 
-    selectActivity.appendChild(newCategory)
-    newCategory.classList.add('new__category')
-    newCategory.id = "optionId"
-    newCategory.setAttribute('value', newCategoryText.value)
-    newCategory.textContent = newCategoryText.value
+    // Verificar si la categoría ya existe
+    let categoryExists = false;
+    const options = selectActivity.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value.toLowerCase() === newCategoryValue.toLowerCase()) {
+            categoryExists = true;
+        }
+    });
 
-    // Guardar la nueva categoría en localStorage
-    saveCategory(newCategoryText.value);
+    if (categoryExists) {
+        alert('Esta categoría ya existe');
+    } else {
+        // Crear la nueva categoría si no existe
+        const newCategory = document.createElement('option');
+        newCategory.classList.add('new__category');
+        newCategory.id = "optionId";
+        newCategory.setAttribute('value', newCategoryValue);
+        newCategory.textContent = newCategoryValue;
 
-    copyingCategories()
-}
+        selectActivity.appendChild(newCategory);
+
+        // Guardar la nueva categoría en localStorage
+        saveCategory(newCategoryValue);
+
+        copyingCategories();
+    }
+};
 
 // Función para guardar una categoría en localStorage
 const saveCategory = (category) => {
@@ -480,8 +532,9 @@ const loadCategories = () => {
         newCategory.setAttribute('value', category); // Establece el valor de la opción
         newCategory.id = "optionId"
         newCategory.textContent = category; // Establece el texto de la opción
+        const newCategoryClone = newCategory.cloneNode(true);
         selectActivity.appendChild(newCategory);
-        selectCategory.appendChild(newCategory)
+        selectCategory.appendChild(newCategoryClone)
     });
 };
 
@@ -569,6 +622,11 @@ const renderExpensesChart = () => {
         options: {
             scales: {
                 x: {
+                    ticks: {
+                        font: {
+                            size: 10,
+                        }
+                    },
                     title: {
                         display: true,
                         text: 'Categorías',
@@ -582,9 +640,9 @@ const renderExpensesChart = () => {
                     title: {
                         display: true,
                         text: 'Monto en $ pesos',
-                    font: {
-                        size: 12
-                        }   
+                        font: {
+                            size: 12
+                        }
                     }
                 },
             },
@@ -741,7 +799,7 @@ const filterByDate = (array) => {
 
             console.log(arrayFilteredDate);
             renderFilteredExpenses(arrayFilteredDate);
-            
+
         } else {
             console.log("Por favor, introduce ambas fechas.");
         }
@@ -749,7 +807,7 @@ const filterByDate = (array) => {
         console.error("No se encontraron los elementos de fecha en el DOM.");
     }
 
-    
+
 };
 
 let dateInitPicker, dateEndPicker;

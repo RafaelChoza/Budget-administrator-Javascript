@@ -58,7 +58,8 @@
                 <label class="modal__activitiesTitle" for="activities">Elige una opción de la razón del gasto</label>
                 <select class="select__activity" name="activities" required>
                     <option class="categoryDefault" value="" disabled selected>Selecciona una opción</option>
-                    <option class="categoryDefault" value="createCategory" class="creat__newCategory">-CREAR CATEGORIA-</option>
+                    <option class="categoryDefault" value="createCategory" class="creat__newCategory">-CREAR CATEGORIA-
+                    </option>
                     <option class="categoryDefault" value="diversion">Diversión</option>
                     <option class="categoryDefault" value="educacion">Educación</option>
                     <option class="categoryDefault" value="trabajo">Trabajo</option>
@@ -111,29 +112,34 @@
                         <span>Filtrar Gastos por categoría</span>
                         <select class="select__category" name="filterCategory" required>
                             <option value="" disabled selected>Selecciona una opción</option>
-                        
-                          
+
+
                         </select>
                     </div>
-                    <d
-                        <span>Filtras gastos por fecha de:</span>
+                    <d <span>Filtras gastos por fecha de:</span>
                         <div class="div__dateRange">
                             <input type="date" class="date__init" placeholder="Fecha de inicio">
                             <span> a </span>
                             <input type="date" class="date__end" placeholder="Fecha Final">
                         </div>
-                    </div>
                 </div>
-            
-                <p class="total__expenses">Total de gastos: $0.00</p>
             </div>
-            
+
+            <p class="total__expenses">Total de gastos: $0.00</p>
+            </div>
+
             <div class="div__expenses">
-               
+
             </div>
         </section>
 
         <div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="filter__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+            </svg>
+
             <p class="add__expenseIcon hide">+</p>
             <p class="reset__icon">Resetear APP</p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="chart__icon">
